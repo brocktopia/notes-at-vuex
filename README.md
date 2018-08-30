@@ -3,6 +3,8 @@
 > A note taking app that retrieves and stores location data for each note. This is a fork of 
 [github.com/brocktopia/notes-at](https://github.com/brocktopia/notes-at) using Vuex for state management of data.
 
+[Development on this repo is currently in progress.]
+
 ## Dependencies
 
 **Server-side**
@@ -64,10 +66,12 @@ npm run dev
 * [Google Places Service API Reference](https://developers.google.com/maps/documentation/javascript/reference/places-service)
 
 ## To-Do Roadmap
-* Incorporate [Vuex](https://vuex.vuejs.org/)
 * Incorporate unit and e2e testing
 * Put it up on [Firebase](https://firebase.google.com/) behind authentications and with user accounts
 * Implement as Progressive Web App
+
+## In Progress
+This repo is currently in development adding Vuex for state management.
 
 ## Done
 Created a version of the app using IndexedDB for data storage. Check that project out 
