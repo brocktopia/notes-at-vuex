@@ -4,14 +4,13 @@ import axios from 'axios'
 import router from './router'
 import moment from 'moment'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import googleConfig from './google-maps-config'
 import './css/style.scss'
 import './assets/svg/symbols.svg'
 
+// Moved map config to external file to reduce chances of committing secret key
 Vue.use(VueGoogleMaps, {
-  load: {
-    key: 'your-google-api-key',
-    libraries: 'places'
-  }
+  load: googleConfig
 });
 
 let servicePort,
@@ -30,15 +29,6 @@ console.log('main.js serviceUrl [' + serviceUrl + servicePort + ']');
 
 Vue.prototype.$axios = axios.create({
   baseURL: serviceUrl + servicePort
-  // baseURL: serviceUrl + '/apiservices/'
-  /*
-     For local development under Apache I configured a proxypass to point to /apiservices/
-     <VirtualHost *:80>
-       SSLProxyEngine on
-       ServerName localhost
-       ProxyPass /apiservices http://localhost:3030
-       ...
-  */
 });
 
 Vue.prototype.$moment = moment;
