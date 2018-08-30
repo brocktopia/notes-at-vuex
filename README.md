@@ -1,9 +1,7 @@
-# notes-at Sample App
+# notes-at-vuex Sample App
 
-> A note taking app that retrieves and stores location data for each note. I created this app 
-as a full-stack project to learn to work with a new toolchain  (MEVN). It is based off of the Vue.JS 
-[webpack-simple](https://github.com/vuejs-templates/webpack-simple) template. For detailed 
-explanation on vue-loader, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+> A note taking app that retrieves and stores location data for each note. This is a fork of 
+[github.com/brocktopia/notes-at](https://github.com/brocktopia/notes-at) using Vuex for state management of data.
 
 ## Dependencies
 
@@ -16,6 +14,7 @@ explanation on vue-loader, consult the [docs for vue-loader](http://vuejs.github
 **Client-side**
 * [VueJS 2.x](https://github.com/vuejs/vue)
 * [Vue-router](https://github.com/vuejs/vue-router)
+* [Vuex](https://vuex.vuejs.org/)
 * [axios](https://github.com/mzabriskie/axios)
 * [vue-googlemaps](https://github.com/Akryum/vue-googlemaps)
 * [Moment.js](https://momentjs.com/)
