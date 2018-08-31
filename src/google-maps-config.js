@@ -4,4 +4,4 @@ let config = {
   libraries: 'places'
 };
 
-export default config;
+export default config
