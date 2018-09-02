@@ -3,8 +3,6 @@
 > A note taking app that retrieves and stores location data for each note. This is a fork of 
 [github.com/brocktopia/notes-at](https://github.com/brocktopia/notes-at) using Vuex for state management of data.
 
-[Development on this repo is currently in progress.]
-
 ## Dependencies
 
 **Server-side**
@@ -71,7 +69,7 @@ npm run dev
 * Implement as Progressive Web App
 
 ## In Progress
-This repo is currently in development adding Vuex for state management.
+Vuex is implemented and I'm in the process of updating the docs.
 
 ## Done
 Created a version of the app using IndexedDB for data storage. Check that project out 
