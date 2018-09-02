@@ -20,8 +20,7 @@
           <span class="notebook-date">{{$moment(notebook.Created_date).format("l")}}</span>
         </li>
       </ul>
-      <div class="notebooks-message">{{notebooksMessage}}</div>
-      <div class="loading-mask" v-if="isLoading"><span>{{loadingMessage}}</span></div>
+      <div v-if="notebooks.length === 0" class="notebooks-message">No notebooks have been created.</div>
     </div>
 
     <div class="navigation">
@@ -31,10 +30,12 @@
     <edit-notebook-dialog
       v-if="showNewNotebook"
       :mode="'create'"
-      :notebook="notebookBaseObj"
+      :notebookSource="notebookBaseObj"
       @save="saveNewNotebook"
       @close="cancelNewNotebook"
     ></edit-notebook-dialog>
+
+    <div class="loading-mask" v-if="isLoading"><span>{{loadingMessage}}</span></div>
 
   </div>
 </template>
@@ -51,8 +52,6 @@
 
     data: function() {
       return {
-        notebooks:[],
-        notebooksMessage:'',
         showNewNotebook:false,
         isLoading: true,
         loadingMessage:'Loading...',
@@ -60,29 +59,23 @@
       }
     },
 
+    computed: {
+      notebooks() {
+        return this.$store.state.notebooks.all
+      }
+    },
+
     mounted: function() {
       //console.log('Notebooks.mounted()');
       vm = this;
-      this.$axios.get('/notebooks')
-        .then(function(res) {
-          //console.log('Notebooks.vue service call response:');
-          //console.dir(res.data);
-          vm.isLoading = false;
-          vm.notebooks = res.data;
-          if (res.data.length > 0) {
-            vm.message = '';
-          } else {
-            vm.notebooksMessage = 'No notebook have been created.';
-          }
-        })
+      vm.$store.dispatch('notebooks/load')
         .then(function() {
+          vm.isLoading = false;
           // Check to see if route is to notebooks-new
           if (vm.$route.name === 'notebooks-new') {
             vm.showNewNotebook = true;
           }
         })
-        .catch(error => console.log(error));
-        //.then(response => (this.data = response.data));
     },
 
     methods:{
@@ -106,17 +99,13 @@
       },
       saveNewNotebook: function(notebook) {
         //console.log('Notebooks.saveNewNotebook()');
-        this.$axios.post('/notebooks/', notebook)
-          .then(function(res) {
-            if (res.data._id) {
-              vm.notebooks.unshift(res.data);
-            }
+        vm.$store.dispatch('notebooks/addNotebook', notebook)
+          .then(function() {
             // clear notebookBaseObj
             vm.notebookBaseObj = {};
             vm.showNewNotebook = false;
             vm.$router.replace('/notebooks');
           })
-          .catch(error => console.log(error));
       }
     }
 

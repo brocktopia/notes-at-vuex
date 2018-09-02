@@ -15,7 +15,7 @@
             <li class="place" v-for="place in places" v-on:click="$emit('select', place)">
               <img :src="place.icon" width="25" height="25"/>
               <span class="place-name">{{place.name}}</span>
-              <!--
+              <!-- The place-type value can get really long
               <span v-if="place.types" class="place-type">({{place.types[0]}})</span>
               -->
             </li>

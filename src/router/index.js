@@ -63,5 +63,14 @@ export default new VueRouter({
       name:'404',
       component: NavError
     }
-  ]
+  ],
+  scrollBehavior (toRoute, fromRoute, savedPosition) {
+    // return desired position
+    //console.log('router.scrollBehavior() to ['+toRoute.name+'] from ['+fromRoute.name+'] savedPosition ['+savedPosition+']');
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  }
 })

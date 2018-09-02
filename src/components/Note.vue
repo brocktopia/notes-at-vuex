@@ -36,8 +36,8 @@
 
     <div class="navigation">
       <a @click="closeNote()">Back to Notebook</a>
-      <a style="float:right;" @click="nextNote()">Next &gt;</a>
-      <a style="float:right;" @click="previousNote()">&lt; Previous</a>
+      <a v-if="noteCount > 1" style="float:right;" @click="nextNote()">Next &gt;</a>
+      <a v-if="noteCount > 1" style="float:right;" @click="previousNote()">&lt; Previous</a>
     </div>
 
     <gmap-map
@@ -95,7 +95,8 @@
     },
 
     props: {
-      note:Object
+      note:Object,
+      noteCount:Number
     },
 
     data: function() {

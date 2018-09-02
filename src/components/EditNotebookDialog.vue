@@ -34,16 +34,30 @@
 </template>
 
 <script>
-  module.exports = {
+  var vm;
+  export default {
+
     props: {
       mode:{
         type:String,
         default: 'edit'
       },
-      notebook:{
+      notebookSource:{
         type: Object,
         required: true
       }
+    },
+
+    data: function() {
+      return {
+        notebook:{name:''}
+      }
+    },
+
+    mounted: function() {
+      //console.log('EditNotebookDialog.mounted()');
+      vm = this;
+      Object.assign(vm.notebook, vm.notebookSource);
     }
   };
 </script>

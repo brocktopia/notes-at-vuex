@@ -5,7 +5,7 @@
       <h2>{{mode === 'edit' ? note.name : 'New Note'}}</h2>
       <span class="button-bar">
         <svg class="icon action-icon" @click="closeNote()"><use xlink:href="./dist/symbols.svg#close-note"></use></svg>
-        <svg class="icon action-icon" v-on:click="saveNote()"><use xlink:href="./dist/symbols.svg#save"></use></svg>
+        <svg class="icon action-icon" @click="saveNote()"><use xlink:href="./dist/symbols.svg#save"></use></svg>
       </span>
     </header>
 
@@ -22,7 +22,7 @@
       <div class="geocoords">
         <label for="geocords">Location:</label>
         <span id="geocords" class="link">{{note.geocode.lat +', '+note.geocode.lng}}</span>
-        <svg class="icon-small action-icon" v-on:click="updateCoordinates()"><use xlink:href="./dist/symbols.svg#my-location"></use></svg>
+        <svg class="icon-small action-icon" @click="updateCoordinates()"><use xlink:href="./dist/symbols.svg#my-location"></use></svg>
       </div>
 
       <div class="place">
@@ -78,6 +78,7 @@
 </template>
 
 <script>
+  // Shared codebase with NoteEditMobile so externalized that code
   import EditNoteImpl from './EditNoteImpl'
 
   export default {

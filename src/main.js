@@ -1,18 +1,21 @@
 import Vue from 'vue'
 import App from './App'
-import axios from 'axios'
+//import axios from 'axios'
 import router from './router'
 import moment from 'moment'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import googleConfig from './google-maps-config'
+import store from './store'
 import './css/style.scss'
 import './assets/svg/symbols.svg'
+
+Vue.config.productionTip = false;
 
 // Moved map config to external file to reduce chances of committing secret key
 Vue.use(VueGoogleMaps, {
   load: googleConfig
 });
-
+/*
 let servicePort,
   serviceUrl = window.location.protocol + '//' + window.location.host;
 if (serviceUrl.lastIndexOf(':') > 6) { // strip port # off of serviceUrl
@@ -30,11 +33,12 @@ console.log('main.js serviceUrl [' + serviceUrl + servicePort + ']');
 Vue.prototype.$axios = axios.create({
   baseURL: serviceUrl + servicePort
 });
-
+*/
 Vue.prototype.$moment = moment;
 
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App)
 });

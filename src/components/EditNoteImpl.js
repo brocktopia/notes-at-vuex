@@ -9,7 +9,7 @@ export default {
   },
 
   props: {
-    note:Object,
+    noteSource:Object,
     mode:String
   },
 
@@ -32,6 +32,7 @@ export default {
       google:null,
       activeView: 'edit-name',
       places:[],
+      note:{name:'',note:'',geocode:{lat:0,lng:0}}, // need enough default values for template
       placesService: null,
       showPlacesDialog: false,
       showMoreButton: false,
@@ -46,6 +47,8 @@ export default {
     if (vm.mode === 'new') {
       vm.updateCoordinates();
     }
+    // copy data from noteSource
+    Object.assign(vm.note, vm.noteSource);
     // get google reference
     vm.$gmapApiPromiseLazy().then((google) => {
       vm.google = google;
@@ -61,14 +64,15 @@ export default {
       //console.log('NoteEditor.updateCoordinates()');
       navigator.geolocation.getCurrentPosition(
         function(position) {
+          //console.dir(position);
           let latlonObj = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
-          vm.$emit('latlon', latlonObj);
+          vm.note.geocode = latlonObj;
         },
         function(err) {
-          console.warn(`updateCoordinates() ERROR(${err.code}): ${err.message}`);
+          console.warn(`EditNoteImpl.updateCoordinates() ERROR(${err.code}): ${err.message}`);
         },
         {
           enableHighAccuracy: true
@@ -77,7 +81,7 @@ export default {
     },
     saveNote: function() {
       //console.log('NoteEditor.saveNote()');
-      vm.$emit('save');
+      vm.$emit('save', vm.note);
     },
     closeNote: function() {
       //console.log('NoteEditor.closeNote()');
@@ -87,10 +91,8 @@ export default {
         vm.$emit('close');
       }
     },
-    hasPlace:function(note) {
-      if (note.place && note.place.name) {
-        return true;
-      } else return false;
+    hasPlace:function(note) { // this should probably be a computed property
+      return !!(note.place && note.place.name)
     },
     findPlace: function(placeName) {
       //console.log('NoteEditor.findPlace()');
@@ -129,7 +131,7 @@ export default {
         lat:  marker.latLng.lat(),
         lng: marker.latLng.lng()
       };
-      vm.$emit('latlon', latlonObj);
+      vm.note.geocode = latlonObj;
     },
     placesClose: function() {
       //console.log('NoteEditor.placesClose()');
@@ -144,17 +146,16 @@ export default {
       vm.placesService.getDetails(options, function(placeDetail, status) {
         //console.log('NoteEdit.placeSelected() place details ['+status+']');
         if (status === 'OK') {
-          let placeObj = {
+          vm.note.place = {
             name: place.name,
             icon: place.icon,
             url: placeDetail.url,
             _id: place.place_id
           };
-          let latlonObj = {
+          vm.note.geocode = {
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng()
           };
-          vm.$emit('place', placeObj, latlonObj);
           vm.showPlacesDialog = false;
         } else {
           console.warn('NoteEdit.placeSelected() Error ['+status+'] getting Place details');
@@ -167,7 +168,7 @@ export default {
     },
     clearPlace: function() {
       //console.log('NoteEditor.clearPlace()');
-      vm.$emit('place', null);
+      vm.note.place = {};
     }
   }
 }

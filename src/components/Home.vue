@@ -31,7 +31,7 @@
     },
     methods: {
       createNewNotebook: function() {
-        console.log('createNewNotebook()');
+        //console.log('Home.createNewNotebook()');
         this.$router.push('/notebooks/new')
       }
     }
