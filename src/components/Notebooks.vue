@@ -65,7 +65,7 @@
       }
     },
 
-    mounted: function() {
+    mounted() {
       //console.log('Notebooks.mounted()');
       vm = this;
       vm.$store.dispatch('notebooks/load')
@@ -79,25 +79,25 @@
     },
 
     methods:{
-      notebookSelect: function(notebook) {
+      notebookSelect(notebook) {
         //console.log('Notebooks.notebookSelect() notebook');
         vm.$router.push('/notebook/'+notebook._id);
       },
-      addNotebook: function() {
+      addNotebook() {
         //console.log('Notebooks.addNotebook()');
         // initialize a new notebook instance
         vm.notebookBaseObj = {name:'', Created_date: new Date()};
         vm.showNewNotebook = true;
         vm.$router.replace('/notebooks/new');
       },
-      cancelNewNotebook: function() {
+      cancelNewNotebook() {
         //console.log('Notebooks.cancelNewNotebook()');
         // clear notebookBaseObj
         vm.notebookBaseObj = {};
         vm.showNewNotebook = false;
         vm.$router.replace('/notebooks');
       },
-      saveNewNotebook: function(notebook) {
+      saveNewNotebook(notebook) {
         //console.log('Notebooks.saveNewNotebook()');
         vm.$store.dispatch('notebooks/addNotebook', notebook)
           .then(function() {

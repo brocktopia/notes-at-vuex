@@ -12,7 +12,7 @@ export default {
 
   actions: {
     load({commit, state}) {
-      console.log('store.actions.notebooks.getNotebooks()');
+      //console.log('store.actions.notebooks.getNotebooks()');
       // check to see if notebooks have been loaded already
       if(state.all.length > 0) {
         console.log('store.actions.notebooks.getNotebooks() notebooks already loaded');
@@ -76,7 +76,7 @@ export default {
         })
     },
     delete({commit}, notebook_id) {
-      console.log('store.actions.notebooks.delete() ['+notebook_id+']');
+      //console.log('store.actions.notebooks.delete() ['+notebook_id+']');
       this.$axios.delete('/notebook/' + notebook_id)
         .then(function (res) {
           if (res.data.success) {

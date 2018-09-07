@@ -94,6 +94,8 @@
       v-on:more="moreSelected"
     ></places-dialog>
 
+    <div class="loading-mask" v-if="isLoading"><span>{{loadingMessage}}</span></div>
+
   </div>
 </template>
 
