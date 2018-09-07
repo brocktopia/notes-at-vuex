@@ -82,10 +82,19 @@ easily exist outside of the notebook context, but even within that context they 
 
 Even in this relatively simple application Vuex ended up making a lot of sense. 
 
+## Notes on decomposition
+
+This branch represents my effort to decompose the notebook view and make the various note views standalone. 
+This allowed me to pull a lot of logic out of Notebook.vue and move it into note components and now the
+business logic of my app is better distributed and contextualized.
+
+The one thing I lost by decomposing the notebook view is a certain context when moving between components. I'd mostly
+done away with that already by relying on routing to change context, but I did have to add some extra logic to handle 
+deep-linking into the various views.
+
 ## To-Do Roadmap
 
 * Incorporate unit and e2e testing
-* Decompose note view components out of the notebook component
 * Put it up on [Firebase](https://firebase.google.com/) behind authentications and with user accounts
 * Implement as Progressive Web App
 
