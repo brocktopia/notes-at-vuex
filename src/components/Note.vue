@@ -4,12 +4,24 @@
     <header>
       <h2>{{activeNote.name}}</h2>
       <span class="button-bar">
-        <svg class="icon" @click="deleteNote()"><use xlink:href="./dist/symbols.svg#delete-note"></use></svg>
-        <svg class="desktop-only icon" @click="editNote()"><use xlink:href="./dist/symbols.svg#edit-note"></use></svg>
-        <svg class="mobile-only icon" @click="editNoteMobile()"><use xlink:href="./dist/symbols.svg#edit-note"></use></svg>
-        <svg v-if="showNoteMap" class="icon" @click="showNote()"><use xlink:href="./dist/symbols.svg#note"></use></svg>
-        <svg v-if="showNoteMap === false" class="icon" @click="showMap()"><use xlink:href="./dist/symbols.svg#map"></use></svg>
-        <svg class="icon" @click="closeNote()"><use xlink:href="./dist/symbols.svg#close-note"></use></svg>
+        <button class="icon" @click="deleteNote()"><svg><use xlink:href="./dist/symbols.svg#delete-note">
+          <title>Delete Note</title>
+        </use></svg></button>
+        <button class="desktop-only icon" @click="editNote()"><svg><use xlink:href="./dist/symbols.svg#edit-note">
+          <title>Edit Note</title>
+        </use></svg></button>
+        <button class="mobile-only icon" @click="editNoteMobile()"><svg><use xlink:href="./dist/symbols.svg#edit-note">
+          <title>Edit Note</title>
+        </use></svg></button>
+        <button v-if="showNoteMap" class="icon" @click="showNote()"><svg><use xlink:href="./dist/symbols.svg#note">
+          <title>Show Note</title>
+        </use></svg></button>
+        <button v-if="showNoteMap === false" class="icon" @click="showMap()"><svg><use xlink:href="./dist/symbols.svg#map">
+          <title>Show Map</title>
+        </use></svg></button>
+        <button class="icon" @click="closeNote()"><svg><use xlink:href="./dist/symbols.svg#close-note">
+          <title>Close Note</title>
+        </use></svg></button>
       </span>
     </header>
 

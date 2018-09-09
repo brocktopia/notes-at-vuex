@@ -7,7 +7,9 @@
       <header>
         <h2>{{mode === 'edit' ? note.name : 'New Mobile Note'}}</h2>
         <span class="button-bar">
-          <svg class="icon" @click="activeView = 'edit-note'"><use xlink:href="./dist/symbols.svg#arrow-forward"></use></svg>
+          <button class="icon" @click="activeView = 'edit-note'"><svg><use xlink:href="./dist/symbols.svg#arrow-forward">
+            <title>Next</title>
+          </use></svg></button>
         </span>
       </header>
 
@@ -68,8 +70,12 @@
       <header>
         <h2>{{mode === 'edit' ? note.name : 'New Mobile Note'}}</h2>
         <span class="button-bar">
-          <svg class="icon" @click="activeView = 'edit-name'"><use xlink:href="./dist/symbols.svg#arrow-back"></use></svg>
-          <svg class="icon" @click="saveNote()"><use xlink:href="./dist/symbols.svg#save"></use></svg>
+          <button class="icon" @click="activeView = 'edit-name'"><svg><use xlink:href="./dist/symbols.svg#arrow-back">
+            <title>Back</title>
+          </use></svg></button>
+          <button class="icon" @click="saveNote()"><svg><use xlink:href="./dist/symbols.svg#save">
+            <title>Save Note</title>
+          </use></svg></button>
         </span>
       </header>
 

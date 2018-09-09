@@ -77,6 +77,19 @@ header {
     }
   }
 }
+button.icon {
+  border: none;
+  background: none;
+  padding: 0;
+  vertical-align: middle;
+  &:hover, &:focus {
+    background-color: rgba(255, 255, 255, 0.3);
+  }
+  svg {
+    width: 50px;
+    height: 50px;
+  }
+}
 h2.warn {
   color: orangered;
 }

@@ -6,11 +6,11 @@
       <header>
         <h2>{{notebook.name}}</h2>
         <span class="button-bar">
-          <svg class="icon" @click="deleteNotebook()"><use xlink:href="./dist/symbols.svg#delete-note"></use></svg>
-          <svg class="icon" @click="editNotebook()"><use xlink:href="./dist/symbols.svg#edit-note"><title>Edit Notebook</title></use></svg>
-          <svg class="icon" @click="showMap()"><use xlink:href="./dist/symbols.svg#map"></use></svg>
-          <svg class="desktop-only icon" @click="addNote()"><use xlink:href="./dist/symbols.svg#add-note"></use></svg>
-          <svg class="mobile-only icon" @click="addNoteMobile()"><use xlink:href="./dist/symbols.svg#add-note"></use></svg>
+          <button class="icon" @click="deleteNotebook()"><svg><use xlink:href="./dist/symbols.svg#delete-note"><title>Delete Notebook</title></use></svg></button>
+          <button class="icon" @click="editNotebook()"><svg><use xlink:href="./dist/symbols.svg#edit-note"><title>Edit Notebook</title></use></svg></button>
+          <button class="icon" @click="showMap()"><svg><use xlink:href="./dist/symbols.svg#map"><title>Show Map</title></use></svg></button>
+          <button class="desktop-only icon" @click="addNote()"><svg><use xlink:href="./dist/symbols.svg#add-note"><title>Add New Note</title></use></svg></button>
+          <button class="mobile-only icon" @click="addNoteMobile()"><svg><use xlink:href="./dist/symbols.svg#add-note"><title>Add New Note</title></use></svg></button>
         </span>
       </header>
 
