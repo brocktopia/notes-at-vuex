@@ -78,6 +78,11 @@
       v-on:more="moreSelected"
     ></places-dialog>
 
+    <modal-dialog v-if="showMessage" @close="showMessage = false">
+      <h3 :class="messageClass" slot="header">{{messageTitle}}</h3>
+      <div slot="body" v-html="messageBody"></div>
+    </modal-dialog>
+
     <div class="loading-mask" v-if="isLoading"><span>{{loadingMessage}}</span></div>
 
   </div>

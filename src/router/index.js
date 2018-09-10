@@ -87,7 +87,7 @@ export default new VueRouter({
       name:'note-edit-mobile',
       component: NoteEditMobile
     },{
-      path:'/note-new-mobile/',
+      path:'/note-new-mobile/:notebook_id',
       name:'note-new-mobile',
       component: NoteEditMobile
     }

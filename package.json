@@ -15,7 +15,8 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "build-dev": "cross-env NODE_ENV=development webpack --progress --hide-modules",
     "start": "nodemon api/server.js",
-    "start-ssl": "nodemon api/server-ssl-notesat.js"
+    "start-ssl": "nodemon api/server-ssl-notesat.js",
+    "test": "jest"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -33,20 +34,45 @@
     "not ie <= 8"
   ],
   "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.16",
     "babel-core": "^6.26.0",
+    "babel-jest": "^21.2.0",
     "babel-loader": "^7.1.2",
     "babel-preset-env": "^1.6.0",
     "babel-preset-stage-3": "^6.24.1",
     "cross-env": "^5.0.5",
     "css-loader": "^0.28.7",
     "file-loader": "^1.1.4",
+    "jest": "^21.2.1",
+    "jest-serializer-vue": "^0.2.0",
     "node-sass": "^4.5.3",
     "nodemon": "^1.18.2",
     "sass-loader": "^6.0.6",
     "uglifyjs-webpack-plugin": "^1.2.7",
+    "vue-jest": "^1.0.0",
     "vue-loader": "^13.0.5",
+    "vue-server-renderer": "^2.4.4",
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "vue"
+    ],
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "transform": {
+      "^.+\\.js$": "<rootDir>/node_modules/babel-jest",
+      ".*\\.(vue)$": "<rootDir>/node_modules/vue-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!vue2-google-maps)"
+    ],
+    "snapshotSerializers": [
+      "<rootDir>/node_modules/jest-serializer-vue"
+    ]
   }
 }

@@ -1,5 +1,6 @@
 import PlacesDialog from './PlacesDialog'
-import {GmapMap} from 'vue2-google-maps'
+import ModalDialog from './ModalDialog'
+import {GmapMap, GmapMarker} from 'vue2-google-maps'
 import { mapGetters } from 'vuex'
 
 let vm,
@@ -7,7 +8,7 @@ let vm,
 export default {
 
   components: {
-    PlacesDialog
+    PlacesDialog, ModalDialog
   },
 
   computed: {
@@ -38,7 +39,11 @@ export default {
       placesService: null,
       showPlacesDialog: false,
       showMoreButton: false,
-      pagination: null
+      pagination: null,
+      showMessage: false,
+      messageClass: 'notify',
+      messageTitle: '',
+      messageBody: ''
     }
   },
 
@@ -245,6 +250,12 @@ export default {
     handleError(err) {
       console.warn(`Note.handleError()`);
       console.dir(err);
+      if (vm.isLoading) {
+        vm.isLoading = false;
+        vm.messageTitle = 'Problem Saving Note';
+        vm.messageBody = 'An error occurred while attempting to save this note. Make sure the note has both a name and note body text.';
+        vm.showMessage = true;
+      }
     }
   }
 }

@@ -6,10 +6,10 @@
       <header>
         <h2>{{notebook.name}}</h2>
         <span class="button-bar">
-          <button class="icon" @click="deleteNotebook()"><svg><use xlink:href="./dist/symbols.svg#delete-note"><title>Delete Notebook</title></use></svg></button>
-          <button class="icon" @click="editNotebook()"><svg><use xlink:href="./dist/symbols.svg#edit-note"><title>Edit Notebook</title></use></svg></button>
-          <button class="icon" @click="showMap()"><svg><use xlink:href="./dist/symbols.svg#map"><title>Show Map</title></use></svg></button>
-          <button class="desktop-only icon" @click="addNote()"><svg><use xlink:href="./dist/symbols.svg#add-note"><title>Add New Note</title></use></svg></button>
+          <button class="icon delete-notebook" @click="deleteNotebook()"><svg><use xlink:href="./dist/symbols.svg#delete-note"><title>Delete Notebook</title></use></svg></button>
+          <button class="icon edit-notebook" @click="editNotebook()"><svg><use xlink:href="./dist/symbols.svg#edit-note"><title>Edit Notebook</title></use></svg></button>
+          <button class="icon show-map" @click="showMap()"><svg><use xlink:href="./dist/symbols.svg#map"><title>Show Map</title></use></svg></button>
+          <button class="desktop-only icon add-note" @click="addNote()"><svg><use xlink:href="./dist/symbols.svg#add-note"><title>Add New Note</title></use></svg></button>
           <button class="mobile-only icon" @click="addNoteMobile()"><svg><use xlink:href="./dist/symbols.svg#add-note"><title>Add New Note</title></use></svg></button>
         </span>
       </header>
@@ -43,7 +43,7 @@
 
       <div class="navigation">
         <router-link to="/">Home</router-link>
-        <router-link to="/notebooks">Notebooks</router-link>
+        <router-link class="notebooks-link" to="/notebooks">Notebooks</router-link>
       </div>
 
     </div>
@@ -213,8 +213,8 @@
           vm.activeView = 'map';
         }
         else {
-          console.warn('Notebook.$route() Unhandled route');
-          console.dir(toRoute);
+          console.warn('Notebook.$route() Unhandled route [' + toRoute.path + ']');
+          //console.dir(toRoute);
         }
       }
     },
@@ -222,7 +222,7 @@
     methods: {
       // Utility methods
       setActiveNote(note_id) {
-        if (vm.activeNote._id != note_id) {
+        if (!vm.activeNote || vm.activeNote._id != note_id) {
           //console.log('Notebook.setActiveNote() for ' + note_id);
           vm.$store.dispatch('notes/setActiveNote', note_id)
             .catch(vm.handleError);
