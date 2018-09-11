@@ -85,10 +85,10 @@ Even in this relatively simple application Vuex ended up making a lot of sense.
 ## Done
 
 See the branch [decompose](https://github.com/brocktopia/notes-at-vuex/tree/decompose).
+See the branch [testing](https://github.com/brocktopia/notes-at-vuex/tree/testing).
 
 ## To-Do Roadmap
 
-* Incorporate unit and e2e testing
 * Put it up on [Firebase](https://firebase.google.com/) behind authentications and with user accounts
 * Implement as Progressive Web App
 
