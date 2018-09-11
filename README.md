@@ -20,6 +20,11 @@
 * [Moment.js](https://momentjs.com/)
 * [Google API Key](https://developers.google.com/maps/documentation/javascript/get-api-key) (for Maps JavaScript API &amp; Places API for Web)
 
+**Testing**
+* [vue-test-utils](https://github.com/vuejs/vue-test-utils)
+* [Jest](https://jestjs.io/)
+* [vue-jest](https://github.com/vuejs/vue-jest)
+
 ## Configuration
 
 You will need to set your Google API Key in [./src/google-maps-config.js](src/google-maps-config.js).
@@ -84,7 +89,7 @@ Even in this relatively simple application Vuex ended up making a lot of sense.
 
 ## Notes on decomposition
 
-This branch represents my effort to decompose the notebook view and make the various note views standalone. 
+The [decompose](https://github.com/brocktopia/notes-at-vuex/tree/decompose) branch represents my effort to decompose the notebook view and make the various note views standalone. 
 This allowed me to pull a lot of logic out of Notebook.vue and move it into note components and now the
 business logic of my app is better distributed and contextualized.
 
@@ -92,9 +97,18 @@ The one thing I lost by decomposing the notebook view is a certain context when 
 done away with that already by relying on routing to change context, but I did have to add some extra logic to handle 
 deep-linking into the various views.
 
+## Notes on testing 
+
+This branch implements basic testing into the app using [vue-test-utils](https://github.com/vuejs/vue-test-utils) and 
+[Jest](https://jestjs.io/) as a test runner. I'd done testing in EmberJS before and the process was similar. The biggest
+challenge was setting up the dependencies for each individual file. Vue-router, Vuex and Moment.js all required some 
+configuration just to get test to mount properly. I ended up having to skip testing the NoteEdit.vue and NoteEditMobile.vue
+because of the way I have those files setup to share a common codebase. That might be something I can figure out later, but 
+the test failed to load modules imported in the external javascript file EditNoteImpl.js. I also had trouble with Vuex
+store getters that I was able to work around for now.
+
 ## To-Do Roadmap
 
-* Incorporate unit and e2e testing
 * Put it up on [Firebase](https://firebase.google.com/) behind authentications and with user accounts
 * Implement as Progressive Web App
 
