@@ -3,6 +3,10 @@
 > A note taking app that retrieves and stores location data for each note. This is a fork of 
 [github.com/brocktopia/notes-at](https://github.com/brocktopia/notes-at) using Vuex for state management of data.
 
+## testing branch
+
+This branch implements testing using vue-test-utils &amp; vue-jest with Jest as the test runner.
+
 ## Dependencies
 
 **Server-side**
