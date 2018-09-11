@@ -3,6 +3,11 @@
 > A note taking app that retrieves and stores location data for each note. This is a fork of 
 [github.com/brocktopia/notes-at](https://github.com/brocktopia/notes-at) using Vuex for state management of data.
 
+## decompose branch
+
+This branch tackles the decomposition of the Notebook.vue component into various free-standing Vue components made 
+possible by the implementation of Vuex into the project.
+
 ## Dependencies
 
 **Server-side**
