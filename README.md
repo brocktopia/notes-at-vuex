@@ -84,7 +84,7 @@ Even in this relatively simple application Vuex ended up making a lot of sense.
 
 ## Done
 
-See the branch [decompose](https://github.com/brocktopia/notes-at-vuex/tree/decompose).
+See the branch [decompose](https://github.com/brocktopia/notes-at-vuex/tree/decompose).  
 See the branch [testing](https://github.com/brocktopia/notes-at-vuex/tree/testing).
 
 ## To-Do Roadmap
