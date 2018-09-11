@@ -5,7 +5,7 @@
 
 ## testing branch
 
-This branch implements testing using vue-test-utils &amp; vue-jest with Jest as the test runner.
+This branch sits on top of the decompose branch and implements testing using vue-test-utils &amp; vue-jest with Jest as the test runner. I wanted to break the app into more atomic units before implementing testing. See notes below.
 
 ## Dependencies
 
