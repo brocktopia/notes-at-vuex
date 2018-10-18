@@ -21,6 +21,7 @@ files on lines 18,19 of [api/server-ssl.js](api/server-ssl.js).
 
 Anyone using a similar configuration should be able to do the same
 by copying their keys over and modifying the paths to those files in 
-[api/server-ssl.js](api/server-ssl.js). After than either modify the
-```"start"``` script in [package.json](../package.json) to point to 
-```server-ssl.js``` or rename ```server-ssl.js``` to ```server.js```.
+[api/server-ssl.js](api/server-ssl.js). After than you can run
+```"npm run start-ssl"``` from the command line to enable https://
+on port 3031. Port 3030 will still be running for http:// connections
+and the app will know which one to used based on window.location.protocol.
