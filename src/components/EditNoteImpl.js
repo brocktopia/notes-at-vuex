@@ -11,22 +11,6 @@ export default {
     PlacesDialog, ModalDialog
   },
 
-  computed: {
-    location: function() {
-      return { lat: vm.note.geocode.lat, lng: vm.note.geocode.lng }
-    },
-    geoLat: function() {
-      if (!this.note) return 0;
-      return this.note.geocode.lat || 0;
-    },
-    geoLon: function() {
-      if (!this.note) return 0;
-      return this.note.geocode.lng || 0;
-    },
-    // Setup getters from store
-    ...mapGetters('notes', ['activeNote','notebookNoteCount'])
-  },
-
   data() {
     return {
       isLoading: true,
@@ -35,6 +19,7 @@ export default {
       activeView: 'edit-name',
       mode:'',
       places:[],
+      placeName:'',
       note:{name:'',note:'',geocode:{lat:0,lng:0}}, // need enough default values for template
       placesService: null,
       showPlacesDialog: false,
@@ -45,6 +30,22 @@ export default {
       messageTitle: '',
       messageBody: ''
     }
+  },
+
+  computed: {
+    location() {
+      return { lat: vm.note.geocode.lat, lng: vm.note.geocode.lng }
+    },
+    geoLat() {
+      if (!this.note) return 0;
+      return this.note.geocode.lat || 0;
+    },
+    geoLon() {
+      if (!this.note) return 0;
+      return this.note.geocode.lng || 0;
+    },
+    // Setup getters from store
+    ...mapGetters('notes', ['activeNote','notebookNoteCount'])
   },
 
   beforeRouteEnter(toRoute, fromRoute, next) {
@@ -114,6 +115,7 @@ export default {
   },
 
   methods:{
+
     updateCoordinates() {
       //console.log(`EditNoteImpl.updateCoordinates()`);
       navigator.geolocation.getCurrentPosition(
@@ -124,6 +126,8 @@ export default {
             lng: position.coords.longitude
           };
           vm.note.geocode = latlonObj;
+          // clear any loaded places
+          vm.places = [];
         },
         function(err) {
           console.warn(`EditNoteImpl.updateCoordinates() ERROR(${err.code}): ${err.message}`);
@@ -133,6 +137,7 @@ export default {
         }
       );
     },
+
     saveNote() {
       //console.log(`EditNoteImpl.saveNote()`);
       //vm.$emit('save', vm.note);
@@ -158,6 +163,7 @@ export default {
           .catch(vm.handleError);
       }
     },
+
     closeNote() {
       //console.log(`EditNoteImpl.closeNote() closeRoute [${closeRoute}]`);
       if (closeRoute) {
@@ -166,11 +172,13 @@ export default {
         vm.$router.push('/notebook/' + vm.activeNote.notebook);
       }
     },
+
     hasPlace(note) { // this should probably be a computed property
       return !!(note.place && note.place.name)
     },
-    findPlace(placeName) {
-      //console.log(`EditNoteImpl.findPlace()`);
+
+    findPlace() {
+      //console.log(`EditNoteImpl.findPlace() place count [${this.places.length}]`);
       let options = {
         location:{
           lat:vm.geoLat,
@@ -178,28 +186,37 @@ export default {
         },
         radius:1000
       };
-      if (placeName) {
-        options.keyword = placeName;
+      if (vm.placeName) {
+        options.keyword = vm.placeName;
       }
-      vm.placesService.nearbySearch(options, function (res, status, pagination) {
-        if (status !== 'OK') return;
-        vm.places ? vm.places = vm.places.concat(res) : vm.places = res;
+      // Check to see if places have already been loaded
+      if (this.places.length > 0) {
         vm.showPlacesDialog = true;
-        if (pagination.hasNextPage) {
-          vm.showMoreButton = true;
-          vm.pagination = pagination;
-        } else {
-          vm.showMoreButton = false;
-          vm.pagination = null;
-        }
-      });
+      } else {
+        // Call PlacesService
+        vm.placesService.nearbySearch(options, function (res, status, pagination) {
+          // this callback will create a listener for pagination
+          if (status !== 'OK') return;
+          vm.places ? vm.places = vm.places.concat(res) : vm.places = res;
+          vm.showPlacesDialog = true;
+          if (pagination.hasNextPage) {
+            vm.showMoreButton = true;
+            vm.pagination = pagination;
+          } else {
+            vm.showMoreButton = false;
+            vm.pagination = null;
+          }
+        });
+      }
     },
+
     moreSelected() {
       //console.log(`EditNoteImpl.moreSelected()`);
       if (vm.pagination) {
         vm.pagination.nextPage();
       }
     },
+
     mapMarkerMoved(marker) {
       //console.log(`EditNoteImpl.mapMarkerMoved()`);
       let latlonObj = {
@@ -207,11 +224,15 @@ export default {
         lng: marker.latLng.lng()
       };
       vm.note.geocode = latlonObj;
+      // clear any loaded places
+      vm.places = [];
     },
+
     placesClose() {
       //console.log(`EditNoteImpl.placesClose()`);
       vm.showPlacesDialog = false;
     },
+
     placeSelected(place) {
       //console.log(`EditNoteImpl.placeSelected()`);
       let options = {
@@ -237,16 +258,22 @@ export default {
         }
       });
     },
-    placeInputUpdated(placeName) {
-      //console.log(`EditNoteImpl.placeInputUpdated()`);
-      vm.findPlace(placeName)
+
+    placeInputUpdated(name) {
+      //console.log(`EditNoteImpl.placeInputUpdated() ${name}`);
+      vm.placeName = name;
+      // clear current results
+      vm.places = [];
+      vm.findPlace()
     },
+
     clearPlace() {
       //console.log(`EditNoteImpl.clearPlace()`);
       vm.$delete(vm.note, 'place');
       // needs to be empty object to save
       vm.note.place = {};
     },
+
     handleError(err) {
       console.warn(`Note.handleError()`);
       console.dir(err);
@@ -257,5 +284,6 @@ export default {
         vm.showMessage = true;
       }
     }
+
   }
 }
