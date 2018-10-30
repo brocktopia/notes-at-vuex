@@ -5,6 +5,9 @@ import VueRouter from 'vue-router'
 import Home from '../components/Home'
 import Notebooks from '../components/Notebooks'
 import Notebook from '../components/Notebook'
+import Note from '../components/Note'
+import NoteEdit from '../components/NoteEdit'
+import NoteEditMobile from '../components/NoteEditMobile'
 import NavError from '../components/NavError'
 
 Vue.use(VueRouter);
@@ -56,6 +59,37 @@ export default new VueRouter({
       path:'/notebook/:notebook_id/map',
       name:'notebook-map',
       component: Notebook
+    }
+    // Note Component
+    ,{
+      path:'/note/:note_id',
+      name:'note',
+      component: Note
+    }
+    ,{
+      path:'/note/:note_id/map',
+      name:'note-map',
+      component: Note
+    }
+    // NoteEdit Component
+    ,{
+      path:'/note-edit/:note_id',
+      name:'note-edit',
+      component: NoteEdit
+    },{
+      path:'/note-new/:notebook_id',
+      name:'note-new',
+      component: NoteEdit
+    }
+    // NoteEditMobile Component
+    ,{
+      path:'/note-edit-mobile/:note_id',
+      name:'note-edit-mobile',
+      component: NoteEditMobile
+    },{
+      path:'/note-new-mobile/:notebook_id',
+      name:'note-new-mobile',
+      component: NoteEditMobile
     }
     // NavError Component
     ,{

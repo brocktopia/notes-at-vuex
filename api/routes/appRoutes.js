@@ -28,7 +28,7 @@ module.exports = function(app) {
     .delete(controller.delete_notebook_notes); // deletes all notes in a notebook but not the notebook--might be an edge case
 
   // operations on an individual note
-  app.route('/notes/note/:noteId')
+  app.route('/note/:noteId')
     .get(controller.read_a_note)
     .put(controller.update_a_note)
     .delete(controller.delete_a_note);

@@ -6,11 +6,11 @@
       <header>
         <h2>{{notebook.name}}</h2>
         <span class="button-bar">
-          <svg class="icon" @click="deleteNotebook()"><use xlink:href="./dist/symbols.svg#delete-note"></use></svg>
-          <svg class="icon" @click="editNotebook()"><use xlink:href="./dist/symbols.svg#edit-note"><title>Edit Notebook</title></use></svg>
-          <svg class="icon" @click="showMap()"><use xlink:href="./dist/symbols.svg#map"></use></svg>
-          <svg class="desktop-only icon" @click="addNote()"><use xlink:href="./dist/symbols.svg#add-note"></use></svg>
-          <svg class="mobile-only icon" @click="addNoteMobile()"><use xlink:href="./dist/symbols.svg#add-note"></use></svg>
+          <button class="icon delete-notebook" @click="deleteNotebook()"><svg><use xlink:href="./dist/symbols.svg#delete-note"><title>Delete Notebook</title></use></svg></button>
+          <button class="icon edit-notebook" @click="editNotebook()"><svg><use xlink:href="./dist/symbols.svg#edit-note"><title>Edit Notebook</title></use></svg></button>
+          <button class="icon show-map" @click="showMap()"><svg><use xlink:href="./dist/symbols.svg#map"><title>Show Map</title></use></svg></button>
+          <button class="desktop-only icon add-note" @click="addNote()"><svg><use xlink:href="./dist/symbols.svg#add-note"><title>Add New Note</title></use></svg></button>
+          <button class="mobile-only icon" @click="addNoteMobile()"><svg><use xlink:href="./dist/symbols.svg#add-note"><title>Add New Note</title></use></svg></button>
         </span>
       </header>
 
@@ -43,7 +43,7 @@
 
       <div class="navigation">
         <router-link to="/">Home</router-link>
-        <router-link to="/notebooks">Notebooks</router-link>
+        <router-link class="notebooks-link" to="/notebooks">Notebooks</router-link>
       </div>
 
     </div>
@@ -89,36 +89,6 @@
       <div slot="body" v-html="messageBody"></div>
     </modal-dialog>
 
-    <note-view
-      v-if="activeView === 'note'"
-      :note="activeNote"
-      :noteCount="notes.length"
-      v-on:edit="editNote"
-      v-on:editmobile="editNoteMobile"
-      v-on:close="closeNote"
-      v-on:delete="deleteNote"
-      v-on:next="nextNote"
-      v-on:previous="previousNote"
-    ></note-view>
-
-    <note-edit
-      v-if="activeView === 'note-edit'"
-      :noteSource="activeNote"
-      :mode="noteEditMode"
-      v-on:save="saveNote"
-      v-on:close="closeNoteNew"
-      v-on:cancel="cancelNoteEdit"
-    ></note-edit>
-
-    <note-edit-mobile
-      v-if="activeView === 'note-edit-mobile'"
-      :noteSource="activeNote"
-      :mode="noteEditMode"
-      v-on:save="saveNote"
-      v-on:close="closeNoteNew"
-      v-on:cancel="cancelNoteEdit"
-    ></note-edit-mobile>
-
     <div class="loading-mask" v-if="isLoading"><span>{{loadingMessage}}</span></div>
 
   </div>
@@ -128,16 +98,13 @@
   import ModalDialog from './ModalDialog'
   import EditNotebookDialog from './EditNotebookDialog'
   import NotebookMap from './NotebookMap'
-  import NoteView from './Note'
-  import NoteEdit from './NoteEdit'
-  import NoteEditMobile from './NoteEditMobile'
   import { mapGetters } from 'vuex'
 
   var vm;
   export default {
 
     components: {
-      NoteView, NoteEdit, NoteEditMobile, ModalDialog, EditNotebookDialog, NotebookMap
+      ModalDialog, EditNotebookDialog, NotebookMap
     },
 
     data: function () {
@@ -245,46 +212,17 @@
           vm.notebookRouteExtra = '/map';
           vm.activeView = 'map';
         }
-        else if (toRoute.name === 'notebook-note') { // notebook note
-          if (vm.setActiveNote(vm.$route.params.note_id)) {
-            vm.activeView = 'note';
-          }
-        }
-        else if (toRoute.name === 'notebook-note-new') { // notebook new note
-          //vm.activeNote = vm.getNoteTemplate();
-          vm.$store.dispatch('notes/createActiveNote', vm.$route.params.notebook_id);
-          vm.noteEditMode = 'new';
-          vm.activeView = 'note-edit'
-        }
-        else if (toRoute.name === 'notebook-note-new-mobile') { // notebook new note for mobile
-          //vm.activeNote = vm.getNoteTemplate();
-          vm.$store.dispatch('notes/createActiveNote', vm.$route.params.notebook_id);
-          vm.noteEditMode = 'new';
-          vm.activeView = 'note-edit-mobile'
-        }
-        else if (toRoute.name === 'notebook-note-edit') { // notebook edit note
-          if (vm.setActiveNote(vm.$route.params.note_id)) {
-            vm.noteEditMode = 'edit';
-            vm.activeView = 'note-edit';
-          }
-        }
-        else if (toRoute.name === 'notebook-note-edit-mobile') { // notebook edit note for mobile
-          if (vm.setActiveNote(vm.$route.params.note_id)) {
-            vm.noteEditMode = 'edit';
-            vm.activeView = 'note-edit-mobile';
-          }
-        }
         else {
-          console.warn('Notebook.$route() Unhandled route');
-          console.dir(toRoute);
+          console.warn('Notebook.$route() Unhandled route [' + toRoute.path + ']');
+          //console.dir(toRoute);
         }
       }
     },
 
     methods: {
       // Utility methods
-      setActiveNote: function (note_id) {
-        if (vm.activeNote._id != note_id) {
+      setActiveNote(note_id) {
+        if (!vm.activeNote || vm.activeNote._id != note_id) {
           //console.log('Notebook.setActiveNote() for ' + note_id);
           vm.$store.dispatch('notes/setActiveNote', note_id)
             .catch(vm.handleError);
@@ -293,51 +231,43 @@
         return true;
       },
 
-      // Navigation inside notebook using $router
-      noteSelect: function (note) {
+      // Note interactions
+      noteSelect(note) {
         //console.log('Notebook.noteSelect() '+note._id);
-        // Let route watcher manage change
-        vm.$router.push('/notebook/' + vm.notebook._id + '/note/' + note._id);
+        vm.$store.dispatch('notes/setActiveNote', note._id)
+          .then(function() {
+            vm.$router.push('/note/' + note._id);
+          })
+          .catch(vm.handleError);
+
+
       },
-      nextNote: function () {
-        //console.log('Notebook.nextNote()');
-        vm.$store.dispatch('notes/nextNote');
-        vm.$router.push('/notebook/' + vm.notebook._id + '/note/' + vm.activeNote._id);
-      },
-      previousNote: function () {
-        //console.log('Notebook.previousNote()');
-        vm.$store.dispatch('notes/previousNote');
-        vm.$router.push('/notebook/' + vm.notebook._id + '/note/' + vm.activeNote._id);
-      },
+      /* These methods were deprecated when component was decomposed but I may want to add
+         edit functionality into the note list at some point
       editNote: function () {
         //console.log('Notebook.editNote()');
-        vm.$router.push('/notebook/' + vm.notebook._id + '/note-edit/' + vm.activeNote._id);
+        vm.$router.push('/note-edit/' + vm.activeNote._id);
       },
       editNoteMobile: function () {
         //console.log('Notebook.editNoteMobile()');
-        vm.$router.push('/notebook/' + vm.notebook._id + '/note-edit-mobile/' + vm.activeNote._id);
+        vm.$router.push('/note-edit-mobile/' + vm.activeNote._id);
       },
-      addNote: function () {
+      */
+      addNote() {
         //console.log('Notebook.addNote()');
-        vm.$router.push('/notebook/' + vm.notebook._id + '/note-new');
+        vm.$store.dispatch('notes/createActiveNote', vm.$route.params.notebook_id)
+          .then(function() {
+            vm.$router.push('/note-new/' + vm.notebook._id);
+          })
+          .catch(vm.handleError)
       },
-      addNoteMobile: function () {
+      addNoteMobile() {
         //console.log('Notebook.addNoteMobile()');
-        vm.$router.push('/notebook/' + vm.notebook._id + '/note-new-mobile');
+        vm.$router.push('/note-new-mobile');
       },
-      closeNote: function () {
-        //console.log('Notebook.closeNote()');
-        vm.$router.push('/notebook/' + vm.notebook._id + vm.notebookRouteExtra);
-      },
-      closeNoteNew: function () {
-        //console.log('Notebook.closeNoteNew()');
-        vm.$router.push('/notebook/' + vm.notebook._id + vm.notebookRouteExtra);
-      },
-      cancelNoteEdit: function () {
-        //console.log('Notebook.cancelNoteEdit()');
-        vm.$router.push('/notebook/' + vm.notebook._id + '/note/' + vm.activeNote._id);
-      },
-      showMap: function () {
+
+      // Notebook methods
+      showMap() {
         //console.log('Notebook.showMap()');
         vm.$router.push('/notebook/' + vm.notebook._id + '/map');
       },
@@ -345,13 +275,11 @@
         //console.log('Notebook.closeNotebookMap()');
         vm.$router.push('/notebook/' + vm.notebook._id);
       },
-
-      // Notebook methods
-      editNotebook: function () {
+      editNotebook() {
         //console.log('Notebook.editNotebook()');
         vm.showEditNotebook = true;
       },
-      saveNotebook: function (notebook) {
+      saveNotebook(notebook) {
         //console.log('Notebook.saveNotebook()');
         vm.loadingMessage = 'Saving...';
         vm.isLoading = true;
@@ -363,15 +291,15 @@
           })
           .catch(vm.handleError);
       },
-      deleteNotebook: function () {
+      deleteNotebook() {
         //console.log('Notebook.deleteNotebook()');
         vm.showConfirmModal = true;
       },
-      cancelDelete: function () {
+      cancelDelete() {
         //console.log('Notebook.cancelDelete()');
         vm.showConfirmModal = false;
       },
-      confirmDelete: function () {
+      confirmDelete() {
         //console.log('Notebook.confirmDelete()');
         vm.loadingMessage = 'Removing Notebook...';
         vm.isLoading = true;
@@ -384,60 +312,12 @@
           .catch(vm.handleError);
       },
       // Not using this any more now that data is more stable with vuex
-      updateNotes: function () {
+      updateNotes() {
         //console.log('Notebook.updateNotes()');
         //vm.loadingMessage = 'Updating Notebook...';
         //vm.isLoading = true;
-
-        /*
-        vm.$axios.get('/notes/'+vm.$route.params.notebook_id)
-          .then(function(res) {
-            if (res.data.errors) {
-              console.warn('updateNotes() Errors');
-              console.dir(res.data);
-            } else if (res.data.length > 0) {
-              vm.notebook.notes = res.data;
-            } else {
-              vm.notebook.notes = [];
-            }
-            vm.isLoading = false;
-          })
-          .catch(vm.handleError);
-          */
       },
-      saveNote: function (note) {
-        //console.log('Notebook.saveNote()');
-        //console.dir(note);
-        vm.loadingMessage = 'Saving Note...';
-        vm.isLoading = true;
-        if (vm.noteEditMode === 'edit') {
-          vm.$store.dispatch('notes/updateActiveNote', note)
-            .then(function () {
-              vm.isLoading = false;
-              vm.$router.push('/notebook/' + vm.notebook._id + '/note/' + vm.activeNote._id);
-            })
-            .catch(vm.handleError);
-        } else if (vm.noteEditMode === 'new') {
-          vm.$store.dispatch('notes/saveActiveNote', note)
-            .then(function () {
-              vm.isLoading = false;
-              vm.$router.push('/notebook/' + vm.notebook._id + '/note/' + vm.activeNote._id);
-            })
-            .catch(vm.handleError);
-        }
-      },
-      deleteNote: function () {
-        //console.log('Notebook.deleteNote()');
-        vm.loadingMessage = 'Removing Note...';
-        vm.isLoading = true;
-        vm.$store.dispatch('notes/delete', vm.activeNote._id)
-          .then(function () {
-            vm.$router.push('/notebook/' + vm.notebook._id + vm.notebookRouteExtra);
-            vm.isLoading = false;
-          })
-          .catch(vm.handleError);
-      },
-      handleError: function (err) {
+      handleError(err) {
         console.warn('Notebook.handleError()');
         console.dir(err);
         vm.isLoading = false;

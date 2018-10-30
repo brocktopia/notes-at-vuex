@@ -7,7 +7,9 @@
       <header>
         <h2>{{mode === 'edit' ? note.name : 'New Mobile Note'}}</h2>
         <span class="button-bar">
-          <svg class="icon" @click="activeView = 'edit-note'"><use xlink:href="./dist/symbols.svg#arrow-forward"></use></svg>
+          <button class="icon" @click="activeView = 'edit-note'"><svg><use xlink:href="./dist/symbols.svg#arrow-forward">
+            <title>Next</title>
+          </use></svg></button>
         </span>
       </header>
 
@@ -68,8 +70,12 @@
       <header>
         <h2>{{mode === 'edit' ? note.name : 'New Mobile Note'}}</h2>
         <span class="button-bar">
-          <svg class="icon" @click="activeView = 'edit-name'"><use xlink:href="./dist/symbols.svg#arrow-back"></use></svg>
-          <svg class="icon" @click="saveNote()"><use xlink:href="./dist/symbols.svg#save"></use></svg>
+          <button class="icon" @click="activeView = 'edit-name'"><svg><use xlink:href="./dist/symbols.svg#arrow-back">
+            <title>Back</title>
+          </use></svg></button>
+          <button class="icon" @click="saveNote()"><svg><use xlink:href="./dist/symbols.svg#save">
+            <title>Save Note</title>
+          </use></svg></button>
         </span>
       </header>
 
@@ -87,12 +93,20 @@
     <places-dialog
       v-if="showPlacesDialog"
       :places="places"
+      :placeName="placeName"
       :showMore="showMoreButton"
       v-on:select="placeSelected"
       v-on:close="placesClose"
       v-on:place="placeInputUpdated"
       v-on:more="moreSelected"
     ></places-dialog>
+
+    <modal-dialog v-if="showMessage" @close="showMessage = false">
+      <h3 :class="messageClass" slot="header">{{messageTitle}}</h3>
+      <div slot="body" v-html="messageBody"></div>
+    </modal-dialog>
+
+    <div class="loading-mask" v-if="isLoading"><span>{{loadingMessage}}</span></div>
 
   </div>
 </template>

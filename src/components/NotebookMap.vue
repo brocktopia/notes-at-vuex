@@ -65,7 +65,7 @@
 </template>
 
 <script>
-  import {GmapMap} from 'vue2-google-maps'
+  import {GmapMap, GmapInfoWindow} from 'vue2-google-maps'
 
   var vm;
   export default {
